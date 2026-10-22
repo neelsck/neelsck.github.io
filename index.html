@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Neel Kansara</title>
+  <meta name="description" content="Neel Kansara builds software for healthcare. Founder of Healthbridge, studying Bioengineering + EECS at UC Berkeley.">
+  <meta property="og:title" content="Neel Kansara">
+  <meta property="og:description" content="Software for healthcare. Founder of Healthbridge, Bioengineering + EECS at UC Berkeley.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#F3F2EE" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#151615" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Apply the saved theme before first paint so there is no flash.
+    try { var t = localStorage.getItem("theme"); if (t === "dark" || t === "light") document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <main class="page">
+    <header class="masthead">
+      <div class="masthead-id">
+        <h1>Neel Kansara</h1>
+        <p class="tagline">Software for healthcare · Bioengineering + EECS at Berkeley</p>
+      </div>
+      <p class="status"><span class="status-dot" aria-hidden="true"></span><span id="status-text">building Healthbridge</span></p>
+    </header>
+
+    <section class="palette" id="palette" aria-label="Site contents">
+      <div class="palette-top">
+        <button class="back" id="back" type="button" hidden>‹ All items</button>
+        <label class="search" id="search" for="q">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="5"/><path d="M11 11 L14 14"/></svg>
+          <input id="q" type="text" autocomplete="off" spellcheck="false"
+                 role="combobox" aria-expanded="true" aria-controls="list" aria-autocomplete="list"
+                 aria-label="Search projects, work, papers and actions" placeholder="Search…">
+          <kbd class="kbd" id="shortcut">⌘K</kbd>
+        </label>
+        <span class="position" id="position" hidden></span>
+      </div>
+
+      <div class="palette-body">
+        <div class="list" id="list" role="listbox" aria-label="Results"></div>
+        <article class="preview" id="preview" aria-live="polite"></article>
+      </div>
+
+      <footer class="palette-foot">
+        <span class="foot-hints" id="hints">↑↓ or hover to preview · ↵ open · type to filter</span>
+        <span class="foot-status" id="foot"></span>
+        <div class="foot-nav" id="foot-nav" hidden>
+          <button type="button" id="prev">‹ <span></span></button>
+          <button type="button" id="next"><span></span> ›</button>
+        </div>
+      </footer>
+
+      <noscript>
+        <div class="noscript">
+          <p>This site works best with JavaScript on. The short version:</p>
+          <ul>
+            <li>Founder &amp; CEO of Healthbridge: live EMT reporting and triage (90% of reports accepted, 10-clinic pilot).</li>
+            <li>Clinical AI product intern at Qualified Health, 2026. ML intern at NASA, 2025.</li>
+            <li>Papers at AGU 2025, IEEE ICCE 2024 and bioRxiv 2026.</li>
+            <li>Email: kansara@berkeley.edu · <a href="https://github.com/neelsck">GitHub</a> · <a href="https://www.linkedin.com/in/neel-kansara-17689525b/">LinkedIn</a></li>
+          </ul>
+        </div>
+      </noscript>
+    </section>
+  </main>
+
+  <script src="content.js"></script>
+  <script src="palette.js"></script>
+</body>
+</html>
