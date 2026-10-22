@@ -36,7 +36,7 @@ window.SITE = {
       image: null,
       body: [
         "I study Bioengineering and EECS at Berkeley. Before college I did ML research at NASA and Dartmouth, and shipped a few products of my own.",
-        "Everything on this site lives in this one card. Hover or use the arrow keys to look around, or start typing."
+        "Everything on this site lives in this one card. Click an item or use the arrow keys to look around, or start typing."
       ],
       facts: [
         { label: "based in", value: "Berkeley, CA" },

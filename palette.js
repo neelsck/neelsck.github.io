@@ -1,4 +1,4 @@
-// The command palette: search, keyboard and hover navigation, previews, actions,
+// The command palette: search, click and keyboard navigation, previews, actions,
 // per-item links (#id), the theme switch, and the phone layout.
 (function () {
   "use strict";
@@ -21,7 +21,6 @@
   var nextBtn = $("next");
 
   var phone = window.matchMedia("(max-width: 720px)");
-  var canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   var state = { query: "", id: items[0].id, open: false };
@@ -308,14 +307,6 @@
       if (input.value) { input.value = ""; applyQuery(); }
       else input.blur();
     }
-  });
-
-  // Hover previews only with a real mouse, and only when it actually moves,
-  // so scrolling the list with the keyboard doesn't fight the pointer.
-  list.addEventListener("mousemove", function (e) {
-    if (!canHover.matches) return;
-    var opt = e.target.closest(".option");
-    if (opt) select(opt.getAttribute("data-id"));
   });
 
   list.addEventListener("click", function (e) {

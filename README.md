@@ -9,7 +9,7 @@ Personal site: one command palette that holds everything. Plain HTML, CSS and Ja
 | `content.js` | All the words, stats and links. **Most edits happen here.** |
 | `index.html` | Page shell: masthead, palette card, no-JavaScript fallback |
 | `styles.css` | Colors (light and dark), type, layout, phone layout |
-| `palette.js` | Search, keyboard and hover navigation, previews, actions, `#links` |
+| `palette.js` | Search, click and keyboard navigation, previews, actions, `#links` |
 | `assets/` | Images and files (screenshots, photo, resume) |
 | `404.html` | Page shown for unknown URLs |
 
@@ -49,4 +49,4 @@ python3 -m http.server 8000
 
 ## Keyboard
 
-`⌘K` / `Ctrl K` or `/` focuses search · `↑ ↓` move · `↵` opens the item's main link or runs its action · `Esc` clears search.
+`⌘K` / `Ctrl K` or `/` focuses search · click or `↑ ↓` to preview · `↵` opens the item's main link or runs its action · `Esc` clears search.
