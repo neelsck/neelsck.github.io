@@ -1,10 +1,22 @@
 // Everything on the site lives here. Edit this file to change what the palette shows.
 //
-// Each item:
-//   id        short name, also the link: neelkansara.com/#id
-//   group     which section it sits under (see `groups` below)
-//   title     name in the list
-//   hint      small grey text on the right of the list row
+// The palette opens on `home`: a short list of categories and commands.
+// Opening a category shows its entries in the results and its overview in the preview.
+//
+// Category:
+//   id           also the link: neelsck.github.io/#building
+//   title        name in the results
+//   subtitle     grey text next to the name in the results
+//   description  intro shown at the top of the category's page
+//   icon         one of: user, build, work, research, mail, moon, link, copy
+//
+// Item (an entry inside a category, or a top-level command like About):
+//   id        also the link: neelsck.github.io/#healthbridge
+//   category  which category it belongs to (leave out for top-level items)
+//   title     name in the results
+//   subtitle  short grey text next to the name in the results
+//   meta      small text on the right of the row (a year, "active", "AGU 2025")
+//   icon      optional; defaults to the category's icon
 //   keywords  extra words that should find this item in search
 //   eyebrow   small line above the title in the preview
 //   lede      one-sentence summary under the title
@@ -12,31 +24,60 @@
 //   stats     optional [{ value, label }]
 //   body      optional paragraphs
 //   facts     optional [{ label, value }] rows
-//   links     optional [{ label, url }]
+//   links     optional [{ label, url }]  (links without a url are hidden)
 //   action    optional "copy-email" | "theme" (makes the item do something)
 
 window.SITE = {
   name: "Neel Kansara",
-  tagline: "Software for healthcare · Bioengineering + EECS at Berkeley",
-  status: "building Healthbridge",
   email: "kansara@berkeley.edu",
   updated: "Oct 2026",
 
-  groups: ["Start here", "Building", "Work", "Research", "Actions"],
+  // What the results show before anyone types, in order.
+  home: ["about", "building", "work", "research", "contact", "theme"],
+
+  categories: [
+    {
+      id: "building",
+      title: "Building",
+      subtitle: "Startups and projects",
+      description: "Companies, products and a nonprofit I've founded or led.",
+      icon: "build"
+    },
+    {
+      id: "work",
+      title: "Work",
+      subtitle: "Internships and roles",
+      description: "Product and machine learning roles, at a clinical AI startup and at NASA.",
+      icon: "work"
+    },
+    {
+      id: "research",
+      title: "Research",
+      subtitle: "Papers, labs and talks",
+      description: "Machine learning on messy biological and scientific data: EEG, antibodies and satellite observations.",
+      icon: "research"
+    },
+    {
+      id: "contact",
+      title: "Contact",
+      subtitle: "Email, GitHub, LinkedIn",
+      description: "Best for health startups, AI in clinical settings, research collaborations and internships.",
+      icon: "mail"
+    }
+  ],
 
   items: [
     {
       id: "about",
-      group: "Start here",
       title: "About Neel",
-      hint: "intro",
-      keywords: "bio who me neel berkeley student",
+      subtitle: "Who I am and what I'm working on",
+      icon: "user",
+      keywords: "bio who me neel berkeley student intro",
       eyebrow: "about",
       lede: "I build software for healthcare. Right now that means Healthbridge, which writes EMT reports in real time.",
-      image: null,
       body: [
         "I study Bioengineering and EECS at Berkeley. Before college I did ML research at NASA and Dartmouth, and shipped a few products of my own.",
-        "Everything on this site lives in this one card. Click an item or use the arrow keys to look around, or start typing."
+        "This site works like a command palette. Open a category to see what's inside, or type to search everything."
       ],
       facts: [
         { label: "based in", value: "Berkeley, CA" },
@@ -44,12 +85,24 @@ window.SITE = {
         { label: "into", value: "health AI, clinical data, startups" }
       ]
     },
+    {
+      id: "theme",
+      title: "Switch theme",
+      subtitle: "Light or dark",
+      icon: "moon",
+      keywords: "theme dark light mode appearance",
+      eyebrow: "appearance",
+      lede: "Change how the site looks. Your choice is remembered on this device.",
+      action: "theme"
+    },
 
+    // ---------- Building ----------
     {
       id: "healthbridge",
-      group: "Building",
+      category: "building",
       title: "Healthbridge",
-      hint: "active",
+      subtitle: "Live EMT reporting and triage",
+      meta: "active",
       keywords: "startup company ems emt health ai llm founder ceo",
       eyebrow: "founder & CEO · Jun 2024 – now",
       lede: "Live EMT report building and triage, connected directly to the hospital EMR.",
@@ -67,13 +120,13 @@ window.SITE = {
     },
     {
       id: "medilingua",
-      group: "Building",
+      category: "building",
       title: "MediLingua",
-      hint: "2023",
+      subtitle: "Emergency interpreter, 50+ languages",
+      meta: "2023",
       keywords: "app translation whisper language congressional",
       eyebrow: "founder & lead developer · 2023 – 2025",
       lede: "Emergency speech interpretation in 50+ languages.",
-      image: null,
       stats: [
         { value: "50+", label: "languages" },
         { value: "1st", label: "Congressional App Challenge" }
@@ -85,9 +138,10 @@ window.SITE = {
     },
     {
       id: "bytebuilders",
-      group: "Building",
+      category: "building",
       title: "ByteBuilders",
-      hint: "nonprofit",
+      subtitle: "Free CS education nonprofit",
+      meta: "nonprofit",
       keywords: "nonprofit education teaching cs 501c3",
       eyebrow: "co-founder & president · 2023 – now",
       lede: "A 501(c)(3) teaching computer science for free.",
@@ -103,9 +157,10 @@ window.SITE = {
     },
     {
       id: "frc",
-      group: "Building",
+      category: "building",
       title: "FRC Team 115",
-      hint: "robotics",
+      subtitle: "Robotics, VP of engineering",
+      meta: "2022",
       keywords: "robotics frc first worlds swerve",
       eyebrow: "VP of engineering · 2022 – 2026",
       lede: "Two trips to the FRC World Championships.",
@@ -114,11 +169,13 @@ window.SITE = {
       ]
     },
 
+    // ---------- Work ----------
     {
       id: "qualified-health",
-      group: "Work",
+      category: "work",
       title: "Qualified Health",
-      hint: "2026",
+      subtitle: "Clinical AI product intern",
+      meta: "2026",
       keywords: "internship product clinical ai databricks sql pm",
       eyebrow: "clinical AI product intern · summer 2026 · Palo Alto",
       lede: "Took a core product from concept to pilot at a 200-person clinical AI startup.",
@@ -132,9 +189,10 @@ window.SITE = {
     },
     {
       id: "nasa",
-      group: "Work",
+      category: "work",
       title: "NASA",
-      hint: "2025",
+      subtitle: "Machine learning intern, GLOBE",
+      meta: "2025",
       keywords: "internship machine learning ml clustering globe climate mosaic",
       eyebrow: "machine learning intern · May 2025 – Jan 2026 · remote",
       lede: "Built MOSAIC, an unsupervised pipeline that flags anomalies in GLOBE mission data.",
@@ -148,11 +206,13 @@ window.SITE = {
       links: []
     },
 
+    // ---------- Research ----------
     {
       id: "mosaic",
-      group: "Research",
+      category: "research",
       title: "MOSAIC",
-      hint: "AGU 2025",
+      subtitle: "Unsupervised anomaly detection",
+      meta: "AGU 2025",
       keywords: "paper publication anomaly clustering first author nasa",
       eyebrow: "paper · AGU 2025 · first author · oral",
       lede: "Metadata Optimization and Statistical Anomaly Detection Using Unsupervised Clustering for Geospatial Temperature Data.",
@@ -163,9 +223,10 @@ window.SITE = {
     },
     {
       id: "asd-eeg",
-      group: "Research",
+      category: "research",
       title: "ASD recognition in EEG",
-      hint: "IEEE 2024",
+      subtitle: "Filtering-driven CNN",
+      meta: "IEEE 2024",
       keywords: "paper publication eeg cnn autism first author",
       eyebrow: "paper · IEEE ICCE 2024 · first author",
       lede: "Enhancing Autism Spectrum Disorder Recognition in EEG Data Through a Filtering-Driven CNN Approach.",
@@ -177,9 +238,10 @@ window.SITE = {
     },
     {
       id: "igg4",
-      group: "Research",
+      category: "research",
       title: "Late IgG4 induction",
-      hint: "bioRxiv",
+      subtitle: "Antibody response to mRNA vaccines",
+      meta: "bioRxiv",
       keywords: "paper publication immunology vaccine covid dartmouth ackerman",
       eyebrow: "preprint · bioRxiv 2026 · co-author · under review at J. Virology",
       lede: "Late Induction of IgG4 Following SARS-CoV-2 mRNA Vaccination in Pregnant and Non-Pregnant Individuals Includes Clonotypes Raised Early in the Response.",
@@ -190,9 +252,10 @@ window.SITE = {
     },
     {
       id: "stroke-eeg",
-      group: "Research",
+      category: "research",
       title: "Stroke triage from EEG",
-      hint: "UCI 2024",
+      subtitle: "PCA and logistic regression",
+      meta: "UCI 2024",
       keywords: "eeg stroke pca logistic regression irvine",
       eyebrow: "student researcher · UC Irvine · summer 2024",
       lede: "Predicting emergency stroke diagnoses from EEG.",
@@ -205,13 +268,16 @@ window.SITE = {
       ]
     },
 
+    // ---------- Contact ----------
     {
       id: "email",
-      group: "Actions",
+      category: "contact",
       title: "Copy email",
-      hint: "action",
+      subtitle: "kansara@berkeley.edu",
+      meta: "copy",
+      icon: "copy",
       keywords: "contact email reach hire talk message",
-      eyebrow: "contact",
+      eyebrow: "email",
       lede: "kansara@berkeley.edu",
       body: [
         "Best for health startups, AI in clinical settings, research collaborations and internships."
@@ -219,27 +285,28 @@ window.SITE = {
       action: "copy-email"
     },
     {
-      id: "links",
-      group: "Actions",
-      title: "GitHub & LinkedIn",
-      hint: "links",
-      keywords: "github linkedin social code profile",
+      id: "github",
+      category: "contact",
+      title: "GitHub",
+      subtitle: "github.com/neelsck",
+      meta: "link",
+      icon: "link",
+      keywords: "github code repos",
       eyebrow: "elsewhere",
-      lede: "Code on GitHub, everything else on LinkedIn.",
-      links: [
-        { label: "GitHub", url: "https://github.com/neelsck" },
-        { label: "LinkedIn", url: "https://www.linkedin.com/in/neel-kansara-17689525b/" }
-      ]
+      lede: "Code and side projects.",
+      links: [{ label: "Open GitHub", url: "https://github.com/neelsck" }]
     },
     {
-      id: "theme",
-      group: "Actions",
-      title: "Switch theme",
-      hint: "light / dark",
-      keywords: "theme dark light mode appearance",
-      eyebrow: "appearance",
-      lede: "Change how the site looks. Your choice is remembered on this device.",
-      action: "theme"
+      id: "linkedin",
+      category: "contact",
+      title: "LinkedIn",
+      subtitle: "Full work history",
+      meta: "link",
+      icon: "link",
+      keywords: "linkedin profile resume cv",
+      eyebrow: "elsewhere",
+      lede: "My full work history and everything else.",
+      links: [{ label: "Open LinkedIn", url: "https://www.linkedin.com/in/neel-kansara-17689525b/" }]
     }
   ]
 };

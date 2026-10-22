@@ -35,6 +35,7 @@
         <button class="back" id="back" type="button" hidden>‹ All items</button>
         <label class="search" id="search" for="q">
           <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="5"/><path d="M11 11 L14 14"/></svg>
+          <button class="scope-chip" id="scope" type="button" hidden><span id="scope-name"></span><span class="scope-x" aria-hidden="true">×</span></button>
           <input id="q" type="text" autocomplete="off" spellcheck="false"
                  role="combobox" aria-expanded="true" aria-controls="list" aria-autocomplete="list"
                  aria-label="Search projects, work, papers and actions" placeholder="Search…">
@@ -49,7 +50,7 @@
       </div>
 
       <footer class="palette-foot">
-        <span class="foot-hints" id="hints">click or ↑↓ to preview · ↵ open · type to filter</span>
+        <span class="foot-hints" id="hints">↑↓ navigate · ↵ open · type to search</span>
         <span class="foot-status" id="foot"></span>
         <div class="foot-nav" id="foot-nav" hidden>
           <button type="button" id="prev">‹ <span></span></button>

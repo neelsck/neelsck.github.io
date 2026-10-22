@@ -194,7 +194,7 @@ a { color: inherit; text-underline-offset: 3px; }
 
 .palette-body {
   display: grid;
-  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  grid-template-columns: minmax(280px, 370px) minmax(0, 1fr);
   height: var(--card-h);
 }
 
@@ -217,28 +217,104 @@ a { color: inherit; text-underline-offset: 3px; }
   color: var(--faint);
 }
 
+/* A result row: icon, title with grey subtitle, then right-side detail and an ↵ hint when selected. */
 .option {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 12px;
-  min-height: 44px;
-  padding: 10px 12px;
+  min-height: 48px;
+  padding: 8px 10px;
   border-radius: 8px;
   color: var(--fg);
   text-decoration: none;
   cursor: pointer;
 }
 
-/* Hover only tints the row so it reads as clickable; the preview changes on click. */
+/* Hover only tints the row so it reads as clickable; nothing changes until you click. */
 @media (hover: hover) { .option:hover { background: var(--hover); } }
 .option[aria-selected="true"] { background: var(--soft); }
 
-.option-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
+.option-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--muted);
+}
 
-.option-hint { flex: none; font-family: var(--mono); font-size: 11px; color: var(--faint); }
+.option[aria-selected="true"] .option-icon { color: var(--fg); }
+
+.option-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+
+.option-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
+
+.option-sub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; color: var(--muted); }
+
+.option-meta { flex: none; font-family: var(--mono); font-size: 11px; color: var(--faint); }
+
+.option-enter {
+  flex: none;
+  display: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+.option[aria-selected="true"] .option-enter { display: inline-block; }
 
 .empty { margin: 0; padding: 20px 12px; color: var(--muted); }
+
+/* Scope chip: shows which category you're inside. */
+.scope-chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 0 8px 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--soft);
+  font: inherit;
+  font-size: 14px;
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.scope-x { color: var(--faint); font-size: 15px; line-height: 1; }
+
+/* Category page index inside the preview. */
+.pv-index { display: flex; flex-direction: column; border-top: 1px solid var(--line); margin-top: 8px; }
+
+.pv-index-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 4px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  font: inherit;
+  color: var(--fg);
+  text-align: left;
+  cursor: pointer;
+}
+
+@media (hover: hover) { .pv-index-row:hover { background: var(--hover); } }
+
+.pv-index-text { flex: 1; min-width: 0; }
+.pv-index-title { display: block; font-weight: 500; }
+.pv-index-lede { display: block; margin-top: 2px; font-size: 14px; color: var(--muted); }
+.pv-index-meta { flex: none; font-family: var(--mono); font-size: 11px; color: var(--faint); }
 
 /* Preview */
 
@@ -375,8 +451,8 @@ a { color: inherit; text-underline-offset: 3px; }
   .masthead { flex-direction: column; gap: 4px; margin-bottom: 18px; }
   .masthead-id { flex-direction: column; gap: 4px; }
   .status { display: none; }
-  .kbd { display: none; }
-  .search { padding: 0 14px; }
+  .kbd, .foot-hints, .option-enter { display: none !important; }
+  .search { padding: 0 14px; gap: 10px; }
 
   .palette-body { grid-template-columns: minmax(0, 1fr); height: auto; min-height: 60vh; }
   .list { border-right: 0; }

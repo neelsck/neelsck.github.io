@@ -9,18 +9,19 @@ Personal site: one command palette that holds everything. Plain HTML, CSS and Ja
 | `content.js` | All the words, stats and links. **Most edits happen here.** |
 | `index.html` | Page shell: masthead, palette card, no-JavaScript fallback |
 | `styles.css` | Colors (light and dark), type, layout, phone layout |
-| `palette.js` | Search, click and keyboard navigation, previews, actions, `#links` |
+| `palette.js` | Home, categories, search, click and keyboard navigation, previews, actions, `#links` |
 | `assets/` | Images and files (screenshots, photo, resume) |
 | `404.html` | Page shown for unknown URLs |
 
 ## Editing content
 
-Open `content.js`. Each project, job, paper or action is one object in `items`. To add one, copy an existing object and change the fields. The comment at the top of the file explains each field.
+Open `content.js`. The palette opens on `home`, a short list of categories and commands. Each category (Building, Work, Research, Contact) is an object in `categories`; each project, job, paper or link is an object in `items` with a `category`. To add an entry, copy an existing one and change the fields. The comment at the top of the file explains each field.
 
+- **New entry:** add an object to `items` with `category: "building"` (or another category id). It appears in that category automatically.
 - **Image:** put the file in `assets/` and set `image: { src: "assets/healthbridge.png", alt: "Healthbridge report editor" }`.
 - **Links:** `links: [{ label: "Code", url: "https://github.com/..." }]`. Links without a `url` are not shown.
-- **Order:** items show in the order they appear in the file, grouped by `group`. Groups follow the `groups` list.
-- **Direct links:** every item can be linked with its `id`, e.g. `https://neelsck.github.io/#healthbridge`.
+- **Order:** entries show in the order they appear in the file. The home list follows `home`.
+- **Direct links:** every category and entry can be linked with its `id`, e.g. `https://neelsck.github.io/#research` or `#healthbridge`.
 
 ## Run it locally
 
@@ -49,4 +50,4 @@ python3 -m http.server 8000
 
 ## Keyboard
 
-`⌘K` / `Ctrl K` or `/` focuses search · click or `↑ ↓` to preview · `↵` opens the item's main link or runs its action · `Esc` clears search.
+`⌘K` / `Ctrl K` or `/` focuses search · `↑ ↓` move · `↵` opens a category, runs an action, or opens an entry's main link · `Esc` clears search or leaves a category · `Backspace` in an empty search leaves a category.
