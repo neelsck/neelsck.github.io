@@ -1,19 +1,21 @@
 /* Layout: one fixed palette card. Results on the left, a preview pane on the right.
    On phones the card shows the list, and opening an item swaps in its preview. */
 
+/* Color scheme: "Stone". Warm greys with a sage accent; no pure white or black. */
 :root {
-  --page: #F3F2EE;
-  --card: #FFFFFF;
-  --line: #E4E2DC;
-  --soft: #F1EFEA;
-  --fg: #1C1C1A;
-  --muted: #62615B;
-  --faint: #767570;
-  --img: #EFEDE8;
-  --btn: #1C1C1A;
-  --btn-fg: #FFFFFF;
-  --accent: #2F6F4E;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 16px 40px rgba(0, 0, 0, 0.07);
+  --page: #E9E7E2;
+  --card: #F4F3EF;
+  --line: #D6D3CC;
+  --soft: #E3E0D9;
+  --hover: #ECEAE5;
+  --fg: #2A2926;
+  --muted: #64625C;
+  --faint: #6F6D67;
+  --img: #E6E3DD;
+  --btn: #2A2926;
+  --btn-fg: #F4F3EF;
+  --accent: #52705C;
+  --shadow: 0 1px 2px rgba(42, 41, 38, 0.05), 0 16px 40px rgba(42, 41, 38, 0.08);
 
   --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -24,34 +26,36 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --page: #151615;
-    --card: #1D1F1E;
-    --line: #2E302E;
-    --soft: #2B2D2B;
-    --fg: #ECEBE6;
-    --muted: #A9A7A0;
-    --faint: #918F89;
-    --img: #262826;
-    --btn: #ECEBE6;
-    --btn-fg: #1C1C1A;
-    --accent: #6FCF97;
+    --page: #1E1E1C;
+    --card: #282826;
+    --line: #3A3936;
+    --soft: #34332F;
+    --hover: #2F2E2B;
+    --fg: #DDDAD3;
+    --muted: #A19E96;
+    --faint: #96938B;
+    --img: #31302D;
+    --btn: #DDDAD3;
+    --btn-fg: #1E1E1C;
+    --accent: #8FB39A;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px rgba(0, 0, 0, 0.35);
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --page: #151615;
-  --card: #1D1F1E;
-  --line: #2E302E;
-  --soft: #2B2D2B;
-  --fg: #ECEBE6;
-  --muted: #A9A7A0;
-  --faint: #918F89;
-  --img: #262826;
-  --btn: #ECEBE6;
-  --btn-fg: #1C1C1A;
-  --accent: #6FCF97;
+  --page: #1E1E1C;
+  --card: #282826;
+  --line: #3A3936;
+  --soft: #34332F;
+  --hover: #2F2E2B;
+  --fg: #DDDAD3;
+  --muted: #A19E96;
+  --faint: #96938B;
+  --img: #31302D;
+  --btn: #DDDAD3;
+  --btn-fg: #1E1E1C;
+  --accent: #8FB39A;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px rgba(0, 0, 0, 0.35);
   color-scheme: dark;
 }
@@ -226,6 +230,8 @@ a { color: inherit; text-underline-offset: 3px; }
   cursor: pointer;
 }
 
+/* Hover only tints the row so it reads as clickable; the preview changes on click. */
+@media (hover: hover) { .option:hover { background: var(--hover); } }
 .option[aria-selected="true"] { background: var(--soft); }
 
 .option-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
