@@ -309,7 +309,7 @@ window.SITE = {
       category: "research",
       title: "Late IgG4 induction",
       subtitle: "mRNA vaccine antibodies",
-      meta: "bioRxiv 2026",
+      meta: "bioRxiv",
       keywords: "paper publication preprint immunology vaccine covid dartmouth ackerman journal of virology",
       eyebrow: "preprint · bioRxiv · May 2026 · co-author · under review at J. Virology",
       lede: "Late Induction of IgG4 Following SARS-CoV-2 mRNA Vaccination in Pregnant and Non-Pregnant Individuals Includes Clonotypes Raised Early in the Response.",
