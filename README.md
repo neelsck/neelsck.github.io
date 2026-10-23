@@ -51,3 +51,7 @@ python3 -m http.server 8000
 ## Keyboard
 
 `⌘K` / `Ctrl K` or `/` focuses search · `↑ ↓` move · `↵` opens a category, runs an action, or opens an entry's main link · `Esc` clears search or leaves a category · `Backspace` in an empty search leaves a category.
+
+## Cache busting
+
+Browsers may keep `styles.css`, `content.js` and `palette.js` for a few minutes. Before committing a change, run `sh scripts/bump-version.sh` to stamp a new `?v=` on those links so visitors get the new files right away.
