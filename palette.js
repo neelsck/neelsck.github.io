@@ -251,15 +251,21 @@
 
   // ---------- footer ----------
 
+  // At rest the bottom bar shows the Campanile coordinates; short messages
+  // (like "copied") replace them for a moment.
+  var localeEl = $("locale");
+
   function restingFoot() {
-    var n = rows.length;
-    foot.textContent = n + (n === 1 ? " result" : " results") + " · updated " + SITE.updated;
-    foot.classList.remove("is-good");
+    foot.hidden = true;
+    foot.textContent = "";
+    localeEl.hidden = false;
   }
 
   function flash(text) {
     foot.textContent = text;
     foot.classList.add("is-good");
+    foot.hidden = false;
+    localeEl.hidden = true;
     clearTimeout(footTimer);
     footTimer = setTimeout(restingFoot, 2400);
   }
@@ -532,17 +538,6 @@
   // ---------- start ----------
 
   if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) $("shortcut").textContent = "Ctrl K";
-  // Local time in Berkeley under the card.
-  var timeEl = $("local-time");
-  function tick() {
-    try {
-      var t = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", minute: "2-digit" }).format(new Date());
-      timeEl.textContent = t.toLowerCase().replace(" ", " ") + " in Berkeley";
-    } catch (e) {}
-  }
-  tick();
-  setInterval(tick, 30000);
-
   input.placeholder = placeholders[0];
   labelThemeButton();
   renderAll();

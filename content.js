@@ -32,7 +32,6 @@
 window.SITE = {
   name: "Neel Kansara",
   email: "kansara@berkeley.edu",
-  updated: "Oct 2026",
 
   // What the results show before anyone types, in order.
   home: ["about", "building", "work", "research", "contact"],
