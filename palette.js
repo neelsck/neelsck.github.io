@@ -72,7 +72,13 @@
   }
 
   function entriesOf(catId) {
-    return SITE.items.filter(function (it) { return it.category === catId; });
+    return SITE.items.filter(function (it) { return it.category === catId && !it.hidden; });
+  }
+
+  // Hidden items appear only when the whole query is one of their triggers.
+  function secretHits(query) {
+    var q = query.toLowerCase().trim().replace(/\s+/g, " ");
+    return SITE.items.filter(function (it) { return it.hidden && (it.triggers || []).indexOf(q) !== -1; });
   }
 
   function iconFor(it) {
@@ -128,8 +134,9 @@
       return SITE.home.map(function (id) { return cats[id] ? catRow(cats[id]) : itemRow(items[id], false); });
     }
     var catHits = SITE.categories.filter(function (c) { return matches(words, [c.title, c.subtitle, c.description].join(" ")); }).map(catRow);
-    var itemHits = SITE.items.filter(function (it) { return matches(words, itemText(it)); }).map(function (it) { return itemRow(it, true); });
-    return catHits.concat(itemHits);
+    var itemHits = SITE.items.filter(function (it) { return !it.hidden && matches(words, itemText(it)); }).map(function (it) { return itemRow(it, true); });
+    var secrets = secretHits(state.query).map(function (it) { return itemRow(it, false); });
+    return secrets.concat(catHits, itemHits);
   }
 
   function listLabel() {
@@ -180,7 +187,7 @@
   function renderItem(it) {
     if (it.image && it.image.src) preview.appendChild(el("img", { class: "pv-image", src: it.image.src, alt: it.image.alt || "", loading: "lazy" }));
     if (it.eyebrow) preview.appendChild(el("p", { class: "pv-eyebrow", text: it.eyebrow }));
-    preview.appendChild(el("h2", { class: "pv-title", text: it.title }));
+    preview.appendChild(el("h2", { class: "pv-title" + (it.hidden ? " pv-gold" : ""), text: it.title }));
     if (it.lede) preview.appendChild(el("p", { class: "pv-lede", text: it.lede }));
 
     if (it.stats && it.stats.length) {
@@ -525,6 +532,17 @@
   // ---------- start ----------
 
   if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) $("shortcut").textContent = "Ctrl K";
+  // Local time in Berkeley under the card.
+  var timeEl = $("local-time");
+  function tick() {
+    try {
+      var t = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", minute: "2-digit" }).format(new Date());
+      timeEl.textContent = t.toLowerCase().replace(" ", " ") + " in Berkeley";
+    } catch (e) {}
+  }
+  tick();
+  setInterval(tick, 30000);
+
   input.placeholder = placeholders[0];
   labelThemeButton();
   renderAll();

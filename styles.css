@@ -15,12 +15,13 @@
   --btn: #2A2926;
   --btn-fg: #F4F3EF;
   --accent: #52705C;
+  --gold: #B8862B;
   --shadow: 0 1px 2px rgba(42, 41, 38, 0.05), 0 16px 40px rgba(42, 41, 38, 0.08);
 
   --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  --card-h: clamp(460px, 64vh, 600px);
+  --card-h: clamp(400px, 56vh, 500px);
   color-scheme: light;
 }
 
@@ -38,6 +39,7 @@
     --btn: #DDDAD3;
     --btn-fg: #1E1E1C;
     --accent: #8FB39A;
+    --gold: #D9AE52;
     --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px rgba(0, 0, 0, 0.35);
     color-scheme: dark;
   }
@@ -56,6 +58,7 @@
   --btn: #DDDAD3;
   --btn-fg: #1E1E1C;
   --accent: #8FB39A;
+  --gold: #D9AE52;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 16px 40px rgba(0, 0, 0, 0.35);
   color-scheme: dark;
 }
@@ -82,9 +85,9 @@ a { color: inherit; text-underline-offset: 3px; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .page {
-  max-width: 1040px;
+  max-width: 880px;
   margin: 0 auto;
-  padding-block: clamp(32px, 8vh, 72px) 48px;
+  padding-block: clamp(32px, 11vh, 112px) 48px;
   padding-left: max(24px, env(safe-area-inset-left, 0px));
   padding-right: max(24px, env(safe-area-inset-right, 0px));
 }
@@ -137,7 +140,7 @@ a { color: inherit; text-underline-offset: 3px; }
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 56px;
+  min-height: 52px;
   border-bottom: 1px solid var(--line);
 }
 
@@ -159,7 +162,7 @@ a { color: inherit; text-underline-offset: 3px; }
   font: inherit;
   font-size: 16px;
   color: var(--fg);
-  padding: 16px 0;
+  padding: 14px 0;
 }
 
 .search input::placeholder { color: var(--faint); transition: opacity 0.2s; }
@@ -198,7 +201,7 @@ a { color: inherit; text-underline-offset: 3px; }
 
 .palette-body {
   display: grid;
-  grid-template-columns: minmax(280px, 370px) minmax(0, 1fr);
+  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
   height: var(--card-h);
 }
 
@@ -325,7 +328,7 @@ a { color: inherit; text-underline-offset: 3px; }
 .preview {
   min-width: 0;
   overflow-y: auto;
-  padding: 28px 32px 32px;
+  padding: 24px 28px 28px;
   overscroll-behavior: contain;
 }
 
@@ -348,7 +351,7 @@ a { color: inherit; text-underline-offset: 3px; }
 
 .pv-title {
   margin: 0 0 10px;
-  font-size: 26px;
+  font-size: 24px;
   line-height: 1.2;
   font-weight: 600;
   letter-spacing: -0.015em;
@@ -501,3 +504,25 @@ a { color: inherit; text-underline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Berkeley, quietly: a California-gold caret, a gold dot on the selected row's ↵,
+   and a coordinates line under the card pointing at the Campanile. */
+.search input { caret-color: var(--gold); }
+
+.locale {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 16px;
+  margin-top: 14px;
+  padding: 0 4px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.locale a { color: inherit; text-decoration: none; }
+.locale a:hover { color: var(--fg); }
+.locale-dot { display: inline-block; width: 5px; height: 5px; margin-right: 7px; border-radius: 50%; background: var(--gold); vertical-align: 1px; }
+
+.pv-gold { color: var(--gold); }

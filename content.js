@@ -88,6 +88,21 @@ window.SITE = {
       ]
     },
 
+    // Hidden: never listed, only found by typing one of its `triggers` exactly.
+    {
+      id: "go-bears",
+      hidden: true,
+      triggers: ["go bears", "oski", "fiat lux", "golden bears", "cal bears"],
+      title: "Go Bears",
+      subtitle: "You found it",
+      icon: "user",
+      eyebrow: "37.8721° N, 122.2578° W",
+      lede: "Fiat lux. Let there be light.",
+      body: [
+        "Written somewhere between Soda Hall and Bechtel, usually after the Campanile had already rung midnight."
+      ]
+    },
+
     // ---------- Building ----------
     {
       id: "healthbridge",
