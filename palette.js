@@ -1,9 +1,11 @@
 // The command palette.
 //
-// Home shows a short list of categories and commands. Opening a category scopes the
-// palette to it: the search bar shows a chip, the results become that category's
-// entries, and the preview becomes the category's page until an entry is chosen.
-// Typing at home searches everything. Nothing changes on hover, only on click or keys.
+// Styled like a shell. The search bar is a prompt showing where you are (~/neel/projects ❯).
+// Home lists the sections; opening one "cd"s into it: the results become its entries and
+// the preview becomes its page until an entry is chosen. Typing at home searches
+// everything. Nothing changes on hover, only on click or keys. When the search box isn't
+// focused you're in NORMAL mode, where j/k move, Enter opens, / or i starts typing and
+// Esc goes up a level.
 (function () {
   "use strict";
 
@@ -27,6 +29,10 @@
   var nextBtn = $("next");
   var scopeChip = $("scope");
   var scopeName = $("scope-name");
+  var homeBtn = $("home-btn");
+  var searchBox = $("search");
+  var ghostText = $("ghost-text");
+  var modeEl = $("mode");
 
   var phone = window.matchMedia("(max-width: 720px)");
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -100,6 +106,15 @@
     return [it.title, it.subtitle, it.meta, it.keywords, it.eyebrow, it.lede, cat && cat.title].join(" ");
   }
 
+  function slugOf(it) { return it.slug || it.id; }
+
+  function pathOf(target) {
+    if (!target) return "~/neel";
+    if (target.type === "cat") return "~/neel/" + target.ref.id;
+    var it = target.ref;
+    return "~/neel/" + (it.category ? it.category + "/" : "") + slugOf(it);
+  }
+
   function isDark() {
     var t = document.documentElement.dataset.theme;
     if (t) return t === "dark";
@@ -117,12 +132,13 @@
   // ---------- rows ----------
 
   function catRow(c) {
-    return { key: "cat:" + c.id, icon: c.icon, title: c.title, sub: c.subtitle, meta: entriesOf(c.id).length + " ›" };
+    return { key: "cat:" + c.id, icon: c.icon, title: c.id + "/", path: true, sub: c.subtitle, meta: entriesOf(c.id).length + " ›" };
   }
 
   function itemRow(it, showCategory) {
-    var meta = showCategory && it.category ? cats[it.category].title : (it.meta || "");
-    return { key: "item:" + it.id, icon: iconFor(it), title: it.title, sub: it.subtitle || "", meta: meta };
+    var meta = showCategory && it.category ? it.category + "/" : (it.meta || "");
+    var top = !it.category && it.slug;
+    return { key: "item:" + it.id, icon: iconFor(it), title: top ? it.slug : it.title, path: !!top, sub: it.subtitle || "", meta: meta, live: !showCategory && it.meta === "active" };
   }
 
   function buildRows() {
@@ -138,19 +154,31 @@
     var catHits = SITE.categories.filter(function (c) { return matches(words, [c.title, c.subtitle, c.description].join(" ")); }).map(catRow);
     var itemHits = SITE.items.filter(function (it) { return !it.hidden && matches(words, itemText(it)); }).map(function (it) { return itemRow(it, true); });
     var secrets = secretHits(state.query).map(function (it) { return itemRow(it, false); });
-    return secrets.concat(catHits, itemHits);
+    return secrets.concat(rank(catHits.concat(itemHits), words));
+  }
+
+  // The label above the results reads like the command that produced them.
+  // Rows whose name matches the search come first; the rest keep their order.
+  function rank(list, words) {
+    return list.map(function (r, i) {
+      var name = (r.title + " " + (r.key.split(":")[1] || "")).toLowerCase();
+      var hit = words.every(function (w) { return name.indexOf(w) !== -1; });
+      return { r: r, s: hit ? 0 : 1, i: i };
+    }).sort(function (a, b) { return a.s - b.s || a.i - b.i; }).map(function (x) { return x.r; });
   }
 
   function listLabel() {
-    if (state.scope) return state.query.trim() ? "Results in " + cats[state.scope].title : cats[state.scope].title;
-    return state.query.trim() ? "Results" : "Go to";
+    var q = state.query.trim().replace(/"/g, "");
+    if (state.scope) return q ? '$ grep "' + q + '" ' + state.scope + "/" : "$ ls " + state.scope + "/";
+    return q ? '$ grep -r "' + q + '" ~/neel' : "$ ls ~/neel";
   }
 
   function renderList() {
     rows = buildRows();
     list.textContent = "";
     if (!rows.length) {
-      list.appendChild(el("p", { class: "empty", text: "Nothing matches “" + state.query.trim() + "”." + (state.scope ? " Press Esc to search everything." : " Try “health”, “papers” or “email”.") }));
+      list.appendChild(el("p", { class: "group-label", text: listLabel(), "aria-hidden": "true" }));
+      list.appendChild(el("p", { class: "empty", text: "No matches for “" + state.query.trim() + "”." + (state.scope ? " Press Esc twice to search everything." : " Try “health”, “papers” or “email”.") }));
       input.removeAttribute("aria-activedescendant");
       return;
     }
@@ -163,10 +191,10 @@
       }, [
         icon(r.icon),
         el("span", { class: "option-text" }, [
-          el("span", { class: "option-title", text: r.title }),
+          el("span", { class: "option-title" + (r.path ? " is-path" : ""), text: r.title }),
           r.sub ? el("span", { class: "option-sub", text: r.sub }) : null
         ]),
-        r.meta ? el("span", { class: "option-meta", text: r.meta }) : null,
+        r.meta ? el("span", { class: "option-meta" + (r.live ? " is-live" : ""), text: (r.live ? "● " : "") + r.meta }) : null,
         el("kbd", { class: "option-enter", text: "↵", "aria-hidden": "true" })
       ]));
     });
@@ -188,13 +216,19 @@
 
   function renderItem(it) {
     if (it.image && it.image.src) preview.appendChild(el("img", { class: "pv-image", src: it.image.src, alt: it.image.alt || "", loading: "lazy" }));
-    if (it.eyebrow) preview.appendChild(el("p", { class: "pv-eyebrow", text: it.eyebrow }));
+    preview.appendChild(el("p", { class: "pv-path", text: pathOf({ type: "item", ref: it }) }));
     preview.appendChild(el("h2", { class: "pv-title" + (it.hidden ? " pv-gold" : ""), text: it.title }));
+    if (it.eyebrow) preview.appendChild(el("p", { class: "pv-eyebrow", text: it.eyebrow }));
     if (it.lede) preview.appendChild(el("p", { class: "pv-lede", text: it.lede }));
 
+    // Stats read like lines added in a diff.
     if (it.stats && it.stats.length) {
-      preview.appendChild(el("div", { class: "pv-stats" }, it.stats.map(function (s) {
-        return el("div", { class: "pv-stat" }, [el("div", { class: "pv-stat-value", text: s.value }), el("div", { class: "pv-stat-label", text: s.label })]);
+      preview.appendChild(el("div", { class: "pv-diff", role: "list" }, it.stats.map(function (s) {
+        return el("div", { class: "pv-diff-line", role: "listitem" }, [
+          el("span", { class: "pv-diff-add", "aria-hidden": "true", text: "+" }),
+          el("span", { class: "pv-diff-value", text: s.value }),
+          el("span", { class: "pv-diff-label", text: s.label })
+        ]);
       })));
     }
     if (it.body && it.body.length) {
@@ -221,8 +255,9 @@
 
   function renderCategory(c) {
     var entries = entriesOf(c.id);
-    preview.appendChild(el("p", { class: "pv-eyebrow", text: entries.length + (entries.length === 1 ? " entry" : " entries") }));
+    preview.appendChild(el("p", { class: "pv-path", text: pathOf({ type: "cat", ref: c }) }));
     preview.appendChild(el("h2", { class: "pv-title", text: c.title }));
+    preview.appendChild(el("p", { class: "pv-eyebrow", text: entries.length + (entries.length === 1 ? " entry" : " entries") }));
     preview.appendChild(el("p", { class: "pv-lede", text: c.description }));
     preview.appendChild(el("div", { class: "pv-index" }, entries.map(function (it) {
       var row = el("button", { class: "pv-index-row", type: "button" }, [
@@ -273,7 +308,16 @@
   }
 
   function updateHints() {
-    hintsEl.textContent = state.scope ? "↑↓ navigate · ↵ open · esc back" : "↑↓ navigate · ↵ open · type to search";
+    var typing = document.activeElement === input;
+    modeEl.textContent = typing ? "INSERT" : "NORMAL";
+    modeEl.classList.toggle("is-insert", typing);
+    if (typing) hintsEl.textContent = "↑↓ move · ↵ open · esc normal";
+    else hintsEl.textContent = state.scope ? "j/k move · ↵ open · esc cd .." : "j/k move · ↵ open · / search";
+  }
+
+  function updateGhost() {
+    searchBox.classList.toggle("is-empty", !input.value);
+    ghostText.textContent = state.scope ? "search " + state.scope + "/…" : placeholders[phAt];
   }
 
   // ---------- navigation ----------
@@ -293,13 +337,12 @@
 
   function renderAll() {
     scopeChip.hidden = !state.scope;
+    homeBtn.classList.toggle("is-current", !state.scope);
     if (state.scope) {
-      scopeName.textContent = cats[state.scope].title;
-      scopeChip.setAttribute("aria-label", "Leave " + cats[state.scope].title);
-      input.placeholder = "Search " + cats[state.scope].title + "…";
-    } else {
-      input.placeholder = placeholders[phAt];
+      scopeName.textContent = state.scope;
+      scopeChip.setAttribute("aria-label", "Show the " + cats[state.scope].title + " page");
     }
+    updateGhost();
     renderList();
     markActive(true);
     renderPreview();
@@ -316,7 +359,6 @@
     renderAll();
     list.scrollTop = 0;
     if (!opts.silent) setHash(id);
-    if (!phone.matches) input.focus({ preventScroll: true });
   }
 
   function exitScope() {
@@ -329,7 +371,6 @@
     setOpen(false);
     renderAll();
     setHash(null);
-    if (!phone.matches) input.focus({ preventScroll: true });
   }
 
   // Click or Enter on a row.
@@ -455,19 +496,20 @@
     markActive(false);
     renderPreview();
     restingFoot();
+    updateGhost();
   }
 
   // Rotating hints in the empty search box, so visitors know they can type.
-  var placeholders = ["Search… try “health”", "Search… try “papers”", "Search… try “email”", "Search… try “robotics”"];
+  var placeholders = ["search… try “health”", "search… try “papers”", "search… try “hackathon”", "search… try “email”"];
   var phAt = 0;
   if (!reduceMotion.matches) {
     setInterval(function () {
       if (state.scope || input.value || document.activeElement === input) return;
-      input.classList.add("ph-fade");
+      searchBox.classList.add("ph-fade");
       setTimeout(function () {
         phAt = (phAt + 1) % placeholders.length;
-        if (!state.scope) input.placeholder = placeholders[phAt];
-        input.classList.remove("ph-fade");
+        updateGhost();
+        searchBox.classList.remove("ph-fade");
       }, 200);
     }, 2800);
   }
@@ -486,8 +528,10 @@
     }
     else if (e.key === "Escape") {
       e.preventDefault();
+      // Like vim: Esc clears what you typed, then leaves INSERT mode. It stops here so
+      // the same keypress doesn't also go up a folder.
+      e.stopPropagation();
       if (input.value) { input.value = ""; applyQuery(); }
-      else if (state.scope) exitScope();
       else input.blur();
     }
     else if (e.key === "Backspace" && !input.value && state.scope) { e.preventDefault(); exitScope(); }
@@ -500,7 +544,18 @@
     activate(opt.getAttribute("data-key"));
   });
 
-  scopeChip.addEventListener("click", exitScope);
+  // Path segments in the prompt are clickable: ~/neel goes home, /projects shows that page.
+  homeBtn.addEventListener("click", function (e) { e.preventDefault(); if (state.scope) exitScope(); else input.focus(); });
+  scopeChip.addEventListener("click", function (e) {
+    e.preventDefault();
+    state.active = null;
+    input.value = "";
+    applyQuery();
+    markActive(false);
+    renderPreview();
+  });
+  input.addEventListener("focus", updateHints);
+  input.addEventListener("blur", updateHints);
   back.addEventListener("click", function () { setOpen(false); markActive(true); });
   prevBtn.addEventListener("click", function () { phoneStep(-1); });
   nextBtn.addEventListener("click", function () { phoneStep(1); });
@@ -512,12 +567,25 @@
       if (state.open) setOpen(false);
       input.focus();
       input.select();
-    } else if (e.key === "/" && !typing) {
+    } else if (typing || e.metaKey || e.ctrlKey || e.altKey) {
+      return;
+    } else if (e.key === "/" || e.key === "i") {
       e.preventDefault();
       input.focus();
-    } else if (e.key === "Escape" && !typing) {
+    } else if (e.key === "Escape") {
       if (state.open) { setOpen(false); markActive(true); }
       else if (state.scope) exitScope();
+    } else if (state.open || phone.matches) {
+      return;
+    } else if (e.key === "j" || e.key === "ArrowDown") {
+      e.preventDefault(); move(1);
+    } else if (e.key === "k" || e.key === "ArrowUp") {
+      e.preventDefault(); move(-1);
+    } else if (e.key === "Enter" && (!document.activeElement || document.activeElement === document.body || list.contains(document.activeElement))) {
+      e.preventDefault();
+      if (state.active) activate(state.active, { fromKeyboard: true }); else move(1);
+    } else if (e.key === "Backspace" && state.scope && (!document.activeElement || document.activeElement === document.body || list.contains(document.activeElement))) {
+      e.preventDefault(); exitScope();
     }
   });
 
@@ -540,8 +608,8 @@
   // ---------- start ----------
 
   if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) $("shortcut").textContent = "Ctrl K";
-  input.placeholder = placeholders[0];
   labelThemeButton();
   renderAll();
+  updateHints();
   openFromHash();
 })();

@@ -144,14 +144,37 @@ a { color: inherit; text-underline-offset: 3px; }
   border-bottom: 1px solid var(--line);
 }
 
+/* The search bar is a shell prompt: ~/neel/projects ❯ with a block cursor. */
 .search {
   flex: 1;
+  min-width: 0;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 0 18px;
+  font-family: var(--mono);
+  font-size: 15px;
   color: var(--faint);
 }
+
+.prompt { flex: none; display: flex; align-items: center; white-space: nowrap; }
+
+.prompt-home, .prompt-dir {
+  padding: 4px 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.prompt-home { color: var(--accent); }
+.prompt-home.is-current { cursor: text; }
+.prompt-dir { color: var(--muted); }
+.prompt-home:not(.is-current):hover, .prompt-dir:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+.prompt-caret { margin-left: 10px; color: var(--gold); }
+
+.prompt-field { position: relative; flex: 1; min-width: 0; display: flex; align-items: center; }
 
 .search input {
   flex: 1;
@@ -160,13 +183,39 @@ a { color: inherit; text-underline-offset: 3px; }
   outline: 0;
   background: transparent;
   font: inherit;
-  font-size: 16px;
   color: var(--fg);
+  caret-color: var(--gold);
   padding: 14px 0;
 }
 
-.search input::placeholder { color: var(--faint); transition: opacity 0.2s; }
-.search input.ph-fade::placeholder { opacity: 0; }
+.search.is-empty input { caret-color: transparent; }
+
+.ghost {
+  position: absolute;
+  inset: 0 0 0 0;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--faint);
+  transition: opacity 0.2s;
+}
+
+.search.is-empty .ghost { display: flex; }
+.search.ph-fade #ghost-text { opacity: 0; transition: opacity 0.2s; }
+
+.block {
+  flex: none;
+  width: 8px;
+  height: 17px;
+  background: var(--gold);
+  opacity: 0.75;
+  animation: blink 1.1s steps(1, end) infinite;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
 
 .kbd {
   font-family: var(--mono);
@@ -215,12 +264,14 @@ a { color: inherit; text-underline-offset: 3px; }
   overscroll-behavior: contain;
 }
 
+/* Reads like the command that produced the results: $ ls ~/neel */
 .group-label {
-  margin: 12px 12px 4px;
+  margin: 12px 12px 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: 12px;
   color: var(--faint);
 }
 
@@ -245,12 +296,9 @@ a { color: inherit; text-underline-offset: 3px; }
   flex: none;
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 7px;
-  border: 1px solid var(--line);
-  background: var(--card);
-  color: var(--muted);
+  width: 22px;
+  height: 22px;
+  color: var(--faint);
 }
 
 .option[aria-selected="true"] .option-icon { color: var(--fg); }
@@ -258,10 +306,12 @@ a { color: inherit; text-underline-offset: 3px; }
 .option-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
 
 .option-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
+.option-title.is-path { font-family: var(--mono); font-size: 14px; }
 
 .option-sub { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; color: var(--muted); }
 
 .option-meta { flex: none; font-family: var(--mono); font-size: 11px; color: var(--faint); }
+.option-meta.is-live { color: var(--accent); }
 
 .option-enter {
   flex: none;
@@ -277,25 +327,6 @@ a { color: inherit; text-underline-offset: 3px; }
 .option[aria-selected="true"] .option-enter { display: inline-block; }
 
 .empty { margin: 0; padding: 20px 12px; color: var(--muted); }
-
-/* Scope chip: shows which category you're inside. */
-.scope-chip {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 28px;
-  padding: 0 8px 0 10px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--soft);
-  font: inherit;
-  font-size: 14px;
-  color: var(--fg);
-  cursor: pointer;
-}
-
-.scope-x { color: var(--faint); font-size: 15px; line-height: 1; }
 
 /* Category page index inside the preview. */
 .pv-index { display: flex; flex-direction: column; border-top: 1px solid var(--line); margin-top: 8px; }
@@ -347,7 +378,8 @@ a { color: inherit; text-underline-offset: 3px; }
   background: var(--img);
 }
 
-.pv-eyebrow { margin: 0 0 6px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.pv-path { margin: 0 0 8px; overflow-wrap: anywhere; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+.pv-eyebrow { margin: -2px 0 14px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
 
 .pv-title {
   margin: 0 0 10px;
@@ -360,26 +392,28 @@ a { color: inherit; text-underline-offset: 3px; }
 
 .pv-lede { margin: 0 0 20px; font-size: 16px; line-height: 1.6; color: var(--muted); max-width: 62ch; }
 
-.pv-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-  gap: 1px;
+/* Stats as added lines in a diff. */
+.pv-diff {
   margin-bottom: 22px;
-  background: var(--line);
+  padding: 10px 14px;
   border: 1px solid var(--line);
-  border-radius: 10px;
-  overflow: hidden;
+  border-radius: 8px;
+  background: var(--page);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.85;
 }
 
-.pv-stat { background: var(--card); padding: 12px 14px; }
-.pv-stat-value { font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
-.pv-stat-label { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+.pv-diff-line { display: grid; grid-template-columns: 14px minmax(64px, auto) 1fr; column-gap: 10px; align-items: baseline; }
+.pv-diff-add { color: var(--accent); }
+.pv-diff-value { color: var(--accent); font-weight: 500; font-variant-numeric: tabular-nums; }
+.pv-diff-label { color: var(--fg); }
 
 .pv-body p { margin: 0 0 14px; line-height: 1.7; max-width: 62ch; }
 
 .pv-facts { margin: 6px 0 22px; border-top: 1px solid var(--line); }
 .pv-fact { display: flex; flex-wrap: wrap; gap: 2px 20px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
-.pv-fact dt { flex: 0 0 110px; padding-top: 2px; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.pv-fact dt { flex: 0 0 110px; padding-top: 2px; font-family: var(--mono); font-size: 12px; color: var(--accent); }
 .pv-fact dd { flex: 1 1 200px; margin: 0; }
 
 .pv-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
@@ -432,6 +466,21 @@ a { color: inherit; text-underline-offset: 3px; }
 }
 
 .foot-status.is-good { color: var(--accent); }
+
+.foot-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+
+/* vim-style mode: NORMAL when browsing, INSERT while typing in the prompt. */
+.mode {
+  flex: none;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--soft);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.mode.is-insert { color: var(--accent); }
 
 .foot-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
 
@@ -486,7 +535,9 @@ a { color: inherit; text-underline-offset: 3px; }
   .quick-links { margin-left: -8px; margin-right: 0; }
   .theme-toggle { width: 44px; height: 44px; }
   .kbd, .foot-hints, .option-enter { display: none !important; }
-  .search { padding: 0 14px; gap: 10px; }
+  .search { padding: 0 14px; gap: 8px; font-size: 15px; }
+  .prompt-caret { margin-left: 8px; }
+  .mode { display: none; }
 
   .palette-body { grid-template-columns: minmax(0, 1fr); height: auto; min-height: 60vh; }
   .list { border-right: 0; }
@@ -505,9 +556,8 @@ a { color: inherit; text-underline-offset: 3px; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 
-/* Berkeley, quietly: a California-gold caret, and the Campanile's coordinates
-   resting in the bottom bar. */
-.search input { caret-color: var(--gold); }
+/* Berkeley, quietly: California-gold cursor and prompt caret, and the Campanile's
+   coordinates resting in the bottom bar. */
 
 .locale { color: var(--faint); text-decoration: none; white-space: nowrap; }
 .locale:hover { color: var(--fg); }

@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="styles.css?v=202610231633">
+  <link rel="stylesheet" href="styles.css?v=202610231642">
   <script>
     // Apply the saved theme before first paint so there is no flash.
     try { var t = localStorage.getItem("theme"); if (t === "dark" || t === "light") document.documentElement.dataset.theme = t; } catch (e) {}
@@ -46,14 +46,19 @@
     <section class="palette" id="palette" aria-label="Site contents">
       <div class="palette-top">
         <button class="back" id="back" type="button" hidden>‹ All items</button>
-        <label class="search" id="search" for="q">
-          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="5"/><path d="M11 11 L14 14"/></svg>
-          <button class="scope-chip" id="scope" type="button" hidden><span id="scope-name"></span><span class="scope-x" aria-hidden="true">×</span></button>
-          <input id="q" type="text" autocomplete="off" spellcheck="false"
-                 role="combobox" aria-expanded="true" aria-controls="list" aria-autocomplete="list"
-                 aria-label="Search projects, work, papers and actions" placeholder="Search…">
+        <div class="search is-empty" id="search">
+          <div class="prompt">
+            <button class="prompt-home" id="home-btn" type="button" aria-label="Go to home">~/neel</button><button class="prompt-dir" id="scope" type="button" hidden>/<span id="scope-name"></span></button>
+            <span class="prompt-caret" aria-hidden="true">❯</span>
+          </div>
+          <div class="prompt-field">
+            <input id="q" type="text" autocomplete="off" spellcheck="false" autocapitalize="off"
+                   role="combobox" aria-expanded="true" aria-controls="list" aria-autocomplete="list"
+                   aria-label="Search projects, work, papers and actions" placeholder="">
+            <span class="ghost" aria-hidden="true"><span class="block"></span><span id="ghost-text">search… try “health”</span></span>
+          </div>
           <kbd class="kbd" id="shortcut">⌘K</kbd>
-        </label>
+        </div>
         <span class="position" id="position" hidden></span>
       </div>
 
@@ -63,7 +68,7 @@
       </div>
 
       <footer class="palette-foot">
-        <span class="foot-hints" id="hints">↑↓ navigate · ↵ open · type to search</span>
+        <span class="foot-left"><span class="mode" id="mode">NORMAL</span><span class="foot-hints" id="hints">↑↓ j/k · ↵ open · / search</span></span>
         <div class="foot-right">
           <span class="foot-status" id="foot" role="status" hidden></span>
           <a class="locale" id="locale" href="https://www.openstreetmap.org/?mlat=37.87206&mlon=-122.25784#map=17/37.87206/-122.25784" target="_blank" rel="noopener" title="Sather Tower, UC Berkeley"><span class="locale-dot" aria-hidden="true"></span>37.8721° N, 122.2578° W</a>
@@ -92,7 +97,7 @@
     </section>
   </main>
 
-  <script src="content.js?v=202610231633"></script>
-  <script src="palette.js?v=202610231633"></script>
+  <script src="content.js?v=202610231642"></script>
+  <script src="palette.js?v=202610231642"></script>
 </body>
 </html>

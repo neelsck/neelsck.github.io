@@ -17,6 +17,7 @@
 //   subtitle  short grey text next to the name in the results
 //   meta      small text on the right of the row (a year, "active", "AGU 2025")
 //   icon      optional; defaults to the category's icon
+//   slug      optional; how the item appears as a path (defaults to its id)
 //   keywords  extra words that should find this item in search
 //   eyebrow   small line above the title in the preview
 //   lede      one-sentence summary under the title
@@ -77,11 +78,11 @@ window.SITE = {
   items: [
     {
       id: "about",
+      slug: "about.md",
       title: "About",
       subtitle: "Who I am and what I'm working on",
       icon: "user",
       keywords: "bio who me neel berkeley student intro",
-      eyebrow: "about",
       lede: "I build software for healthcare. Right now that means Healthbridge, which writes EMT reports in real time.",
       body: [
         "I study Bioengineering and EECS at Berkeley. Before college I did ML research at NASA and Dartmouth, and shipped a few products of my own.",
@@ -114,7 +115,7 @@ window.SITE = {
       id: "healthbridge",
       category: "projects",
       title: "Healthbridge",
-      subtitle: "Live EMT reporting and triage",
+      subtitle: "Live EMT reporting",
       meta: "active",
       keywords: "startup company ems emt health ai llm founder ceo medical assistant",
       eyebrow: "founder & CEO · Jun 2024 – now",
