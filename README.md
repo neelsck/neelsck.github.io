@@ -15,9 +15,9 @@ Personal site: one command palette that holds everything. Plain HTML, CSS and Ja
 
 ## Editing content
 
-Open `content.js`. The palette opens on `home`, a short list of categories and commands. Each category (Building, Work, Research, Contact) is an object in `categories`; each project, job, paper or link is an object in `items` with a `category`. To add an entry, copy an existing one and change the fields. The comment at the top of the file explains each field.
+Open `content.js`. The palette opens on `home`, a short list of categories and commands. Each category (Projects, Work & internships, Research, Contact & links) is an object in `categories`; each project, job, paper or link is an object in `items` with a `category`. To add an entry, copy an existing one and change the fields. The comment at the top of the file explains each field.
 
-- **New entry:** add an object to `items` with `category: "building"` (or another category id). It appears in that category automatically.
+- **New entry:** add an object to `items` with `category: "projects"` (or another category id). It appears in that category automatically.
 - **Image:** put the file in `assets/` and set `image: { src: "assets/healthbridge.png", alt: "Healthbridge report editor" }`.
 - **Links:** `links: [{ label: "Code", url: "https://github.com/..." }]`. Links without a `url` are not shown.
 - **Order:** entries show in the order they appear in the file. The home list follows `home`.
