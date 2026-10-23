@@ -106,17 +106,21 @@ a { color: inherit; text-underline-offset: 3px; }
 
 .tagline { margin: 0; color: var(--muted); }
 
-.status { margin: 0; font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.quick-links { display: flex; flex-wrap: wrap; gap: 4px; margin-right: -8px; }
 
-.status-dot {
-  display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-  vertical-align: 1px;
+.quick-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
 }
+
+.quick-links a:hover { color: var(--fg); background: var(--soft); }
 
 /* The card */
 
@@ -426,6 +430,32 @@ a { color: inherit; text-underline-offset: 3px; }
 
 .foot-status.is-good { color: var(--accent); }
 
+.foot-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
+
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-right: -8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.theme-toggle:hover { color: var(--fg); background: var(--soft); }
+
+/* Show the moon in light mode (switch to dark), the sun in dark mode (switch to light). */
+.theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-toggle .icon-sun { display: block; }
+  :root:not([data-theme="light"]) .theme-toggle .icon-moon { display: none; }
+}
+
 .foot-nav { display: flex; justify-content: space-between; width: 100%; }
 
 .foot-nav button {
@@ -448,9 +478,10 @@ a { color: inherit; text-underline-offset: 3px; }
 
 @media (max-width: 720px) {
   .page { padding-block: 40px 16px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-  .masthead { flex-direction: column; gap: 4px; margin-bottom: 18px; }
-  .masthead-id { flex-direction: column; gap: 4px; }
-  .status { display: none; }
+  .masthead { flex-direction: column; align-items: flex-start; gap: 6px; margin-bottom: 16px; }
+  .masthead-id { flex-direction: column; gap: 2px; }
+  .quick-links { margin-left: -8px; margin-right: 0; }
+  .theme-toggle { width: 44px; height: 44px; }
   .kbd, .foot-hints, .option-enter { display: none !important; }
   .search { padding: 0 14px; gap: 10px; }
 
@@ -459,7 +490,7 @@ a { color: inherit; text-underline-offset: 3px; }
   .preview { display: none; padding: 20px 18px 24px; }
   .pv-title { font-size: 24px; }
 
-  .palette.is-open .search, .palette.is-open .list, .palette.is-open .foot-hints, .palette.is-open .foot-status { display: none; }
+  .palette.is-open .search, .palette.is-open .list, .palette.is-open .foot-hints, .palette.is-open .foot-right { display: none; }
   .palette.is-open .preview { display: block; }
 }
 

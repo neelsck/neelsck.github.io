@@ -196,8 +196,8 @@
         return el("div", { class: "pv-fact" }, [el("dt", { text: f.label }), el("dd", { text: f.value })]);
       })));
     }
-    if (it.action) {
-      var label = it.action === "copy-email" ? "Copy email" : (isDark() ? "Use light mode" : "Use dark mode");
+    if (it.action === "copy-email") {
+      var label = "Copy email";
       var btn = el("button", { class: "pv-action", type: "button" }, [document.createTextNode(label + " "), el("kbd", { text: "↵" })]);
       btn.addEventListener("click", function () { runAction(it); });
       preview.appendChild(btn);
@@ -369,14 +369,25 @@
         function () { flash("✓ copied " + SITE.email); },
         function () { flash("Couldn't copy. Select the address instead."); }
       );
-    } else if (it.action === "theme") {
-      var next = isDark() ? "light" : "dark";
-      document.documentElement.dataset.theme = next;
-      try { localStorage.setItem("theme", next); } catch (e) {}
-      renderPreview();
-      flash("✓ " + next + " mode");
     }
   }
+
+  // ---------- theme toggle (bottom bar icon) ----------
+
+  var themeBtn = $("theme-toggle");
+
+  function labelThemeButton() {
+    var label = isDark() ? "Switch to light mode" : "Switch to dark mode";
+    themeBtn.setAttribute("aria-label", label);
+    themeBtn.title = label;
+  }
+
+  themeBtn.addEventListener("click", function () {
+    var next = isDark() ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem("theme", next); } catch (e) {}
+    labelThemeButton();
+  });
 
   // ---------- phone layout ----------
 
@@ -509,15 +520,13 @@
 
   window.addEventListener("hashchange", openFromHash);
   if (phone.addEventListener) phone.addEventListener("change", function () { if (!phone.matches) setOpen(false); });
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
-    var t = parseKey(state.active);
-    if (t && t.ref.action === "theme") renderPreview();
-  });
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", labelThemeButton);
 
   // ---------- start ----------
 
   if (!/Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent)) $("shortcut").textContent = "Ctrl K";
   input.placeholder = placeholders[0];
+  labelThemeButton();
   renderAll();
   openFromHash();
 })();

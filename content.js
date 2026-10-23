@@ -25,7 +25,9 @@
 //   body      optional paragraphs
 //   facts     optional [{ label, value }] rows
 //   links     optional [{ label, url }]  (links without a url are hidden)
-//   action    optional "copy-email" | "theme" (makes the item do something)
+//   action    optional "copy-email" (makes the item do something)
+//
+// Light/dark mode is the icon in the palette's bottom bar, not a search item.
 
 window.SITE = {
   name: "Neel Kansara",
@@ -33,7 +35,7 @@ window.SITE = {
   updated: "Oct 2026",
 
   // What the results show before anyone types, in order.
-  home: ["about", "building", "work", "research", "contact", "theme"],
+  home: ["about", "building", "work", "research", "contact"],
 
   categories: [
     {
@@ -84,16 +86,6 @@ window.SITE = {
         { label: "studying", value: "Bioengineering + EECS, class of 2030" },
         { label: "into", value: "health AI, clinical data, startups" }
       ]
-    },
-    {
-      id: "theme",
-      title: "Switch theme",
-      subtitle: "Light or dark",
-      icon: "moon",
-      keywords: "theme dark light mode appearance",
-      eyebrow: "appearance",
-      lede: "Change how the site looks. Your choice is remembered on this device.",
-      action: "theme"
     },
 
     // ---------- Building ----------
