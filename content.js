@@ -8,7 +8,7 @@
 //   title        name in the results
 //   subtitle     grey text next to the name in the results
 //   description  intro shown at the top of the category's page
-//   icon         one of: user, build, work, research, mail, link, copy, file
+//   icon         one of: user, build, work, research, award, mail, link, copy, file
 //
 // Item (an entry inside a category, or a top-level command like About):
 //   id        also the link: neelsck.github.io/#healthbridge
@@ -34,7 +34,7 @@ window.SITE = {
   email: "kansara@berkeley.edu",
 
   // What the results show before anyone types, in order.
-  home: ["about", "projects", "work", "research", "contact"],
+  home: ["about", "projects", "work", "research", "awards", "contact"],
 
   categories: [
     {
@@ -57,6 +57,13 @@ window.SITE = {
       subtitle: "Papers, preprints and talks",
       description: "Machine learning on messy biological and scientific data: EEG, antibodies and satellite observations.",
       icon: "research"
+    },
+    {
+      id: "awards",
+      title: "Awards",
+      subtitle: "Honors, scholarships and wins",
+      description: "Scholarships, competition wins and recognition, most recent first.",
+      icon: "award"
     },
     {
       id: "contact",
@@ -346,6 +353,102 @@ window.SITE = {
         { value: "Best", label: "session presentation" }
       ],
       links: []
+    },
+
+    // ---------- Awards ----------
+    {
+      id: "award-yc-agents",
+      category: "awards",
+      title: "YC hackathon, 1st place",
+      subtitle: "Sell2Agents",
+      meta: "2026",
+      keywords: "award hackathon y combinator yc first place winner agents sell2agents armature prize",
+      eyebrow: "Y Combinator · “Make Something Agents Want” · Armature track",
+      lede: "First place for best agent experience, with a $2K prize, for Sell2Agents.",
+      body: [
+        "Built in 24 hours with Vivan Doshi, Esha Verma and Ananya Pradhan."
+      ]
+    },
+    {
+      id: "award-yc-memorable",
+      category: "awards",
+      title: "YC hackathon, track award",
+      subtitle: "RoboDojo",
+      meta: "2026",
+      keywords: "award hackathon y combinator yc memorable track robodojo own your intelligence",
+      eyebrow: "Y Combinator · “Own Your Intelligence” · Memorable track",
+      lede: "Award in the Memorable track for RoboDojo, among 225 builders.",
+      body: []
+    },
+    {
+      id: "award-afrotc",
+      category: "awards",
+      title: "AFROTC Type 4 Scholarship",
+      subtitle: "Department of the Air Force",
+      meta: "2026",
+      keywords: "award scholarship air force rotc afrotc type 4 technical",
+      eyebrow: "scholarship · Department of the Air Force · Jan 2026",
+      lede: "Type 4 Technical Air Force ROTC Scholarship.",
+      stats: [
+        { value: "$36K", label: "per year" }
+      ]
+    },
+    {
+      id: "award-national-merit",
+      category: "awards",
+      title: "National Merit Finalist",
+      subtitle: "Top <1% of PSAT takers",
+      meta: "2025",
+      keywords: "award scholarship national merit finalist psat",
+      eyebrow: "National Merit Scholarship Corporation · Jan 2025",
+      lede: "National Merit Scholarship Finalist, in the top 1% of PSAT takers nationally.",
+      stats: [
+        { value: "<1%", label: "nationally" }
+      ]
+    },
+    {
+      id: "award-ieee",
+      category: "awards",
+      title: "Best Session Presentation",
+      subtitle: "IEEE ICCE",
+      meta: "2024",
+      keywords: "award ieee icce best session presentation consumer electronics eeg autism",
+      eyebrow: "Institute of Electrical and Electronics Engineers · Jan 2024",
+      lede: "Best Session Presentation Award at the IEEE International Conference on Consumer Electronics.",
+      body: [
+        "Recognized for technical communication and research significance among peer-reviewed conference papers, for my first-author paper on recognizing autism spectrum disorder in EEG data."
+      ]
+    },
+    {
+      id: "award-cac-2023",
+      category: "awards",
+      title: "Congressional App Challenge",
+      subtitle: "1st place, MediLingua · 2023",
+      keywords: "award congressional app challenge first place winner medilingua capitol illinois lahood",
+      eyebrow: "U.S. House of Representatives · Dec 2023",
+      lede: "First place in Rep. Darin LaHood's district, Illinois's 16th, for MediLingua.",
+      body: [
+        "I led the team and demoed the app at the U.S. Capitol."
+      ]
+    },
+    {
+      id: "award-cac-2021",
+      category: "awards",
+      title: "Congressional App Challenge",
+      subtitle: "1st place, VolunTier · 2021",
+      keywords: "award congressional app challenge first place winner voluntier new jersey sherrill",
+      eyebrow: "U.S. House of Representatives · Dec 2021",
+      lede: "First place in Rep. Mikie Sherrill's district, New Jersey's 11th, for VolunTier."
+    },
+    {
+      id: "award-frc-worlds",
+      category: "awards",
+      title: "FRC World Championships",
+      subtitle: "Qualified twice, Team 115",
+      meta: "2×",
+      keywords: "award robotics frc first world championships worlds qualifier monta vista",
+      eyebrow: "FIRST Robotics Competition · Monta Vista Robotics",
+      lede: "Qualified for the FRC World Championships twice with Team 115."
     },
 
     // ---------- Contact & links ----------
